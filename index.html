@@ -807,28 +807,48 @@
       document.getElementById("mainContent").classList.remove("fade-out");
     }
     
-    function exitApplication() {
-      applicationActive = false;
-      
-      // Hide confirmation popup and overlay
-      document.getElementById("confirmationPopup").style.display = "none";
-      document.getElementById("overlay").style.display = "none";
-      
-      // Hide the main application
-      document.getElementById("mainApplication").style.display = "none";
-      
-      // Show the exit screen
-      document.getElementById("exitScreen").style.display = "flex";
-      
-      // Clear any ongoing Firebase connections
-      database.goOffline();
-      
-      // Disable all event listeners
-      disableAllInteractions();
-      
-      // Attempt to close the app using different methods
-      attemptAppClose();
-    }
+ 
+
+function exitApplication() {
+
+  // Remove dim overlay & fade
+  document.getElementById("confirmationPopup").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("mainContent").classList.remove("fade-out");
+
+  // Android Cordova / WebView
+  if (navigator.app && navigator.app.exitApp) {
+    navigator.app.exitApp();
+    return;
+  }
+
+  // Android native interface
+  if (typeof Android !== "undefined" && Android.exitApp) {
+    Android.exitApp();
+    return;
+  }
+
+  // Browser attempt (will fail in most cases)
+  window.open('', '_self');
+  window.close();
+
+  // 🔴 If still open → lock UI (no dim)
+  document.body.innerHTML = `
+    <div style="
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:Arial;
+      font-size:18px;
+      color:#555;
+      text-align:center;
+    ">
+      You may now close this tab or press back.
+    </div>
+  `;
+}
+
     
     function disableAllInteractions() {
       // Remove all click event listeners

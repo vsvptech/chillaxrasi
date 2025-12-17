@@ -738,20 +738,13 @@
     }
     
 function exitApplication() {
-  applicationActive = false;
-
-  // Hide everything
-  document.getElementById("confirmationPopup").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-
-  // Try to close the app (works in WebView / popup windows)
-  window.open('', '_self');
-  window.close();
-
-  // Fallback: show blank screen (no page open)
-  document.body.innerHTML = "";
-  document.body.style.background = "#000";
+  if (navigator.app && navigator.app.exitApp) {
+    navigator.app.exitApp(); // REAL APP EXIT
+  } else {
+    window.close();
+  }
 }
+
 
     function showFavorites() {
       if (!applicationActive) return;

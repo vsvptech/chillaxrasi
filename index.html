@@ -1,0 +1,845 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8"></meta>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
+  <title>Chillax Rasi</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></link>
+  <style>
+    body {
+      text-transform: capitalize;
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 10px;
+      background-color: #f5f5f5;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0px;
+      font-size: 13px;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      text-align: center;
+      color: #ffffff;
+    }
+    
+    td:first-child {
+      font-weight: bold;
+      text-align: left;
+    }
+    
+    td:last-child {
+      text-align: center;
+      width: 50px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      margin: 4px 0;
+      display: inline-block;
+      border: 1px solid #007bff;
+      box-sizing: border-box;
+      text-transform: capitalize;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 5px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .button-container {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .add-button {
+      background-color: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      min-width: 100px;
+    }
+    
+    .favorite-button {
+      background-color: #ff4444;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      min-width: 100px;
+    }
+    
+    .viewall-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      min-width: 100px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      border-radius: 10px;
+      width: 320px;
+    }
+    
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    
+    .popup-title {
+      font-weight: bold;
+      font-size: 18px;
+      color: #007bff;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ff4444;
+      width: auto;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .close-btn:hover {
+      color: #ff0000;
+    }
+ 
+    .search-container {
+      display: flex;
+      margin-bottom: 15px;
+      margin-top: 10px;
+      gap: 5px;
+    }
+
+    .search-bar {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .super-button {
+      padding: 10px 15px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      height: 35px;
+      font-family: Arial, Helvetica, sans-serif;
+      min-width: 70px;
+    }
+    
+    .count-button {
+      padding: 10px 15px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: Arial, Helvetica, sans-serif;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .close-icon-btn {
+      background: #ff4444;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+      padding: 8px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(255, 68, 68, 0.3);
+    }
+    
+    .close-icon-btn:hover {
+      background-color: #ff0000;
+      transform: scale(1.1);
+    }
+    
+    .main-content {
+      transition: opacity 0.3s ease;
+      height: calc(100vh - 150px);
+      overflow-y: auto;
+    }
+    
+    .fade-out {
+      opacity: 0.5;
+    }
+    
+    label {
+      color: #333;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    
+    span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .heart-icon {
+      color: #ff4444;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    
+    .heart-icon:hover {
+      transform: scale(1.2);
+    }
+    
+    .heart-icon.active {
+      color: #ff0000;
+    }
+    
+    .heart-icon.inactive {
+      color: #ccc;
+    }
+
+    tr:nth-child(odd) {
+      background: #ffffff;
+      color: #333;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f0f8ff;
+      color: #333;
+    }
+    
+    tr:hover {
+      background-color: #e6f7ff;
+    }
+    
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: calc(100% - 120px);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    /* Confirmation Popup */
+    .confirmation-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 25px;
+      background-color: #fff;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      z-index: 2000;
+      border-radius: 15px;
+      width: 300px;
+      text-align: center;
+    }
+    
+    .confirmation-icon {
+      font-size: 50px;
+      color: #ff4444;
+      margin-bottom: 15px;
+    }
+    
+    .confirmation-title {
+      font-size: 22px;
+      color: #333;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    .confirmation-message {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+    
+    .confirmation-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .confirm-btn {
+      padding: 12px 25px;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    
+    .cancel-btn {
+      padding: 12px 25px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Confirmation Popup -->
+  <div class="confirmation-popup" id="confirmationPopup">
+    <div class="confirmation-icon">
+      <i class="fas fa-power-off"></i>
+    </div>
+    <h2 class="confirmation-title">Exit Application?</h2>
+    <p class="confirmation-message">
+      Are you sure you want to close Chillax Rasi?<br>
+      The application will exit completely.
+    </p>
+    <div class="confirmation-buttons">
+      <button class="confirm-btn" onclick="exitApplication()">
+        <i class="fas fa-check"></i> Yes
+      </button>
+      <button class="cancel-btn" onclick="closeConfirmation()">
+        <i class="fas fa-times"></i> No
+      </button>
+    </div>
+  </div>
+    
+  <!-- Main Application -->
+  <div id="mainApplication">
+    <div class="header-container">
+      <div class="logo-title">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiv3Lg8Dz4rrxyPM3cG3V8uMccEck-754MGyf_6aJgrOnotvvwBzkCYAGx0-t4WMwTC1vUeM-kbYUzah9_R9G69LF2gJwyZBLC3gR7bZOAYdrqV2nMgAR07dEOmCymyLFtwWSlk25xLzOtNygGYCaFoFza0GDYTJvyZHUciz_ZZHe-Xzy58WI4qn1IZOQ8/s16000/rasilogo.png" 
+             style="vertical-align: middle; height: 40px;" />
+        <span>Chillax Rasi</span>
+      </div>
+      <button class="close-icon-btn" onclick="showConfirmation()" title="Exit Application">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+    
+    <div class="main-content" id="mainContent">
+      
+      <!-- Action Buttons: Add, Favorite, View All -->
+      <div class="button-container">
+        <button class="add-button" onclick="showAddPopup()">
+          <i class="fa-solid fa-user-plus"></i> Add
+        </button>
+        <button class="favorite-button" onclick="showFavorites()">
+          <i class="fas fa-heart"></i> Favorites
+        </button>
+        <button class="viewall-button" onclick="showAll()">
+          <i class="fas fa-list"></i> View All
+        </button>
+      </div>
+      
+      <!-- Search and Record Count -->
+      <div class="search-container">
+        <input id="searchInput" oninput="searchTable()" placeholder="Search by Name, Rasi, or Natchathiram..." type="text" class="search-bar" />
+        <button class="super-button" onclick="clearSearch()">Clear</button>
+        <button class="count-button" id="recordCount">0</button> 
+      </div>
+      
+      <!-- Data Table -->
+      <div class="table-container">
+        <table id="data-table">
+          <thead>
+            <tr>
+              <th style="width: 30%;">Name</th>
+              <th style="width: 25%;">Rasi</th>
+              <th style="width: 25%;">Natchathiram</th>
+              <th style="width: 10%;">Favorite</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add/Edit Popup -->
+    <div class="popup" id="addPopup">
+      <div class="popup-header">
+        <div class="popup-title" id="popupTitle">Add New Entry</div>
+        <button class="close-btn" onclick="closePopup()">×</button>
+      </div>
+      <label for="name">Name:</label>
+      <input id="name" required="" type="text" />
+
+      <label for="rasi">Rasi:</label>
+      <select id="rasi" required="">
+        <option value="மேஷம்">மேஷம்</option>
+        <option value="ரிஷபம்">ரிஷபம்</option>
+        <option value="மிதுனம்">மிதுனம்</option>
+        <option value="கடகம்">கடகம்</option>
+        <option value="சிம்மம்">சிம்மம்</option>
+        <option value="கன்னி">கன்னி</option>
+        <option value="துலாம்">துலாம்</option>
+        <option value="விருச்சிகம்">விருச்சிகம்</option>
+        <option value="தனுசு">தனுசு</option>
+        <option value="மகரம்">மகரம்</option>
+        <option value="கும்பம்">கும்பம்</option>
+        <option value="மீனம்">மீனம்</option>
+      </select>
+
+      <label for="natchathiram">Natchathiram:</label>
+      <select id="natchathiram" required="">
+        <option value="அஸ்வினி">அஸ்வினி</option>
+        <option value="பரணி">பரணி</option>
+        <option value="கார்த்திகை">கார்த்திகை</option>
+        <option value="ரோகிணி">ரோகிணி</option>
+        <option value="மிருகசீரிஷம்">மிருகசீரிஷம்</option>
+        <option value="திருவாதிரை">திருவாதிரை</option> 
+        <option value="புனர்பூசம்">புனர்பூசம்</option>
+        <option value="பூசம்">பூசம்</option> 
+        <option value="ஆயில்யம்">ஆயில்யம்</option>
+        <option value="மகம்">மகம்</option> 
+        <option value="பூரம்">பூரம்</option>
+        <option value="உத்திரம்">உத்திரம்</option> 
+        <option value="அஸ்தம்">அஸ்தம்</option>
+        <option value="சித்திரை">சித்திரை</option> 
+        <option value="சுவாதி">சுவாதி</option>
+        <option value="விசாகம்">விசாகம்</option> 
+        <option value="அனுஷம்">அனுஷம்</option>
+        <option value="கேட்டை">கேட்டை</option> 
+        <option value="மூலம்">மூலம்</option>
+        <option value="பூராடம்">பூராடம்</option> 
+        <option value="உத்திராடம்">உத்திராடம்</option>
+        <option value="திருவோணம்">திருவோணம்</option>
+        <option value="அவிட்டம்">அவிட்டம்</option>
+        <option value="சதயம்">சதயம்</option> 
+        <option value="பூரட்டாதி">பூரட்டாதி</option> 
+        <option value="உத்திரட்டாதி">உத்திரட்டாதி</option>
+        <option value="ரேவதி">ரேவதி</option> 
+      </select>
+
+      <div class="action-buttons">
+        <button onclick="saveData()" style="flex: 1;">Save</button>
+        <button onclick="closePopup()" style="flex: 1; background-color: #6c757d;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include the Firebase SDK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.7/vue.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+  
+  <!-- Initialize Firebase with your project config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCN40WG6MAbxmvZbpoYL1LBz6IvpHuNXn0",
+      authDomain: "chillax-rasi.firebaseapp.com",
+      databaseURL: "https://chillax-rasi-default-rtdb.firebaseio.com",
+      projectId: "chillax-rasi",
+      storageBucket: "chillax-rasi.appspot.com",
+      messagingSenderId: "120157041493",
+      appId: "1:120157041493:web:1d3ed7ca858215933375dc",
+      measurementId: "G-Z9B9CR9WF5"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+  </script>
+
+  <script>
+    let selectedDocId = null;
+    let showingFavorites = false;
+    let allData = {};
+    let applicationActive = true;
+
+    const loadData = async () => {
+      try {
+        const snapshot = await database.ref('chillaxrasi').once('value');
+        allData = snapshot.val() || {};
+        showAll();
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    function renderTable(data) {
+      const tableBody = document.querySelector("#data-table tbody");
+      tableBody.innerHTML = "";
+
+      if (data) {
+        Object.keys(data).forEach(key => {
+          const item = data[key];
+          const isFavorite = item.favorite || false;
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.rasi}</td>
+            <td>${item.natchathiram}</td>
+            <td>
+              <i class="fas fa-heart heart-icon ${isFavorite ? 'active' : 'inactive'}" 
+                 onclick="toggleFavorite('${key}', ${isFavorite})" 
+                 title="${isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}">
+              </i>
+            </td>
+          `;
+          row.setAttribute("data-doc-id", key);
+          row.setAttribute("data-favorite", isFavorite);
+          tableBody.appendChild(row);
+        });
+      }
+    }
+
+    async function toggleFavorite(docId, currentFavoriteStatus) {
+      if (!applicationActive) return;
+      
+      try {
+        const dataRef = database.ref('chillaxrasi').child(docId);
+        await dataRef.update({ favorite: !currentFavoriteStatus });
+        
+        // Update local data
+        if (allData[docId]) {
+          allData[docId].favorite = !currentFavoriteStatus;
+        }
+        
+        // Refresh display based on current view
+        if (showingFavorites) {
+          showFavorites();
+        } else {
+          showAll();
+        }
+        
+        // Update record count
+        updateRecordCount();
+      } catch (error) {
+        console.error("Error updating favorite:", error);
+      }
+    }
+
+    document.querySelector("#data-table tbody").addEventListener("click", function (event) {
+      if (!applicationActive) return;
+      
+      const clickedElement = event.target;
+      // Only handle clicks on name, rasi, or natchathiram cells (not the heart icon)
+      if (clickedElement.tagName === "TD" && clickedElement.cellIndex < 3) {
+        const row = clickedElement.parentNode;
+        const docId = row.getAttribute("data-doc-id");
+        showEditPopup(docId);
+      }
+    });
+
+    function showAddPopup() {
+      if (!applicationActive) return;
+      document.getElementById("name").value = "";
+      document.getElementById("rasi").value = "";
+      document.getElementById("natchathiram").value = "";
+      document.getElementById("popupTitle").textContent = "Add New Entry";
+      
+      selectedDocId = null;
+      document.getElementById("addPopup").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("mainContent").classList.add("fade-out");
+    }
+    
+    function showEditPopup(docId) {
+      if (!applicationActive) return;
+      selectedDocId = docId;
+      document.getElementById("popupTitle").textContent = "Edit Entry";
+
+      try {
+        const dataRef = database.ref('chillaxrasi').child(docId);
+        dataRef.once('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            document.getElementById("name").value = data.name;
+            document.getElementById("rasi").value = data.rasi;
+            document.getElementById("natchathiram").value = data.natchathiram;
+          }
+        });
+
+        document.getElementById("addPopup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("mainContent").classList.add("fade-out");
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    }
+
+    async function saveData() {
+      if (!applicationActive) return;
+      
+      const name = document.getElementById("name").value;
+      const rasi = document.getElementById("rasi").value;
+      const natchathiram = document.getElementById("natchathiram").value;
+
+      if (!name || !rasi || !natchathiram) {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      try {
+        const dataToSave = { name, rasi, natchathiram };
+        
+        if (!selectedDocId) {
+          // For new entries, default favorite to false
+          dataToSave.favorite = false;
+          const newDataRef = database.ref('chillaxrasi').push();
+          await newDataRef.set(dataToSave);
+        } else {
+          // For editing, preserve the favorite status
+          const dataRef = database.ref('chillaxrasi').child(selectedDocId);
+          const existingData = (await dataRef.once('value')).val();
+          dataToSave.favorite = existingData.favorite || false;
+          await dataRef.update(dataToSave);
+        }
+
+        selectedDocId = null;
+        closePopup();
+        await loadData(); // Reload data to get updated records
+      } catch (error) {
+        console.error("Error saving data:", error);
+        alert(`Error saving data. Check the console for more details.\n${error.message}`);
+      }
+    }
+
+    function updateRecordCount() {
+      if (!applicationActive) return;
+      
+      const tableBody = document.querySelector("#data-table tbody");
+      const visibleRows = tableBody.querySelectorAll("tr:not([style*='display: none'])").length;
+      document.getElementById("recordCount").textContent = visibleRows;
+    }
+
+    function closePopup() {
+      if (!applicationActive) return;
+      document.getElementById("addPopup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("mainContent").classList.remove("fade-out");
+    }
+    
+    function showConfirmation() {
+      document.getElementById("confirmationPopup").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("mainContent").classList.add("fade-out");
+    }
+    
+    function closeConfirmation() {
+      document.getElementById("confirmationPopup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("mainContent").classList.remove("fade-out");
+    }
+    
+function exitApplication() {
+  applicationActive = false;
+
+  // Hide everything
+  document.getElementById("confirmationPopup").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+
+  // Try to close the app (works in WebView / popup windows)
+  window.open('', '_self');
+  window.close();
+
+  // Fallback: show blank screen (no page open)
+  document.body.innerHTML = "";
+  document.body.style.background = "#000";
+}
+
+    function showFavorites() {
+      if (!applicationActive) return;
+      
+      showingFavorites = true;
+      const favoriteData = {};
+      
+      Object.keys(allData).forEach(key => {
+        if (allData[key].favorite) {
+          favoriteData[key] = allData[key];
+        }
+      });
+      
+      renderTable(favoriteData);
+      updateRecordCount();
+      
+      // Update button states
+      document.querySelector('.favorite-button').style.backgroundColor = '#ff0000';
+      document.querySelector('.viewall-button').style.backgroundColor = '#4CAF50';
+    }
+
+    function showAll() {
+      if (!applicationActive) return;
+      
+      showingFavorites = false;
+      renderTable(allData);
+      updateRecordCount();
+      
+      // Update button states
+      document.querySelector('.favorite-button').style.backgroundColor = '#ff4444';
+      document.querySelector('.viewall-button').style.backgroundColor = '#45a049';
+    }
+
+    function clearSearch() {
+      if (!applicationActive) return;
+      document.getElementById("searchInput").value = "";
+      searchTable();
+    }
+
+    function searchTable() {
+      if (!applicationActive) return;
+      
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const tableBody = document.querySelector("#data-table tbody");
+      const rows = tableBody.querySelectorAll("tr");
+
+      rows.forEach(row => {
+        const name = row.querySelector("td:nth-child(1)").textContent.toLowerCase();
+        const rasi = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+        const natchathiram = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
+
+        if (name.includes(searchTerm) || rasi.includes(searchTerm) || natchathiram.includes(searchTerm)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      updateRecordCount();
+    }
+
+    // Initial loading of data
+    loadData();
+    
+    // Close popups when clicking outside
+    document.getElementById('overlay').addEventListener('click', function() {
+      if (applicationActive) {
+        closePopup();
+        closeConfirmation();
+      }
+    });
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+      if (event.altKey && event.key === 'x' && applicationActive) {
+        showConfirmation();
+      }
+      if (event.altKey && event.key === 'a' && applicationActive) {
+        showAddPopup();
+      }
+      if (event.altKey && event.key === 'f' && applicationActive) {
+        showFavorites();
+      }
+      if (event.altKey && event.key === 'v' && applicationActive) {
+        showAll();
+      }
+    });
+  </script>
+
+</body>
+</html>

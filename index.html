@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"></meta>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chillax Rasi</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></link>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
       text-transform: capitalize;
@@ -390,9 +391,78 @@
       cursor: pointer;
       min-width: 100px;
     }
+    
+    /* Exit Screen */
+    .exit-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    
+    .exit-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .exit-title {
+      font-size: 28px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    
+    .exit-message {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 400px;
+      line-height: 1.5;
+    }
+    
+    .exit-instruction {
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 350px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
+  <!-- Exit Screen -->
+  <div class="exit-screen" id="exitScreen">
+    <div class="exit-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <h1 class="exit-title">Application Closed</h1>
+    <p class="exit-message">
+      Chillax Rasi has been closed successfully.
+    </p>
+    <div class="exit-instruction">
+      <i class="fas fa-info-circle"></i>
+      Please use your device's back button or recent apps menu to close completely.
+    </div>
+  </div>
+  
   <!-- Confirmation Popup -->
   <div class="confirmation-popup" id="confirmationPopup">
     <div class="confirmation-icon">
@@ -401,14 +471,14 @@
     <h2 class="confirmation-title">Exit Application?</h2>
     <p class="confirmation-message">
       Are you sure you want to close Chillax Rasi?<br>
-      The application will exit completely.
+      <strong>The application will exit completely.</strong>
     </p>
     <div class="confirmation-buttons">
       <button class="confirm-btn" onclick="exitApplication()">
-        <i class="fas fa-check"></i> Yes
+        <i class="fas fa-check"></i> Yes, Exit
       </button>
       <button class="cancel-btn" onclick="closeConfirmation()">
-        <i class="fas fa-times"></i> No
+        <i class="fas fa-times"></i> Cancel
       </button>
     </div>
   </div>
@@ -445,7 +515,7 @@
       
       <!-- Search and Record Count -->
       <div class="search-container">
-        <input id="searchInput" oninput="searchTable()" placeholder="Search by Name, Rasi, or Natchathiram..." type="text" class="search-bar" />
+        <input id="searchInput" oninput="searchTable()" placeholder="Search by Name..." type="text" class="search-bar" />
         <button class="super-button" onclick="clearSearch()">Clear</button>
         <button class="count-button" id="recordCount">0</button> 
       </div>
@@ -475,10 +545,10 @@
         <button class="close-btn" onclick="closePopup()">×</button>
       </div>
       <label for="name">Name:</label>
-      <input id="name" required="" type="text" />
+      <input id="name" required type="text" />
 
       <label for="rasi">Rasi:</label>
-      <select id="rasi" required="">
+      <select id="rasi" required>
         <option value="மேஷம்">மேஷம்</option>
         <option value="ரிஷபம்">ரிஷபம்</option>
         <option value="மிதுனம்">மிதுனம்</option>
@@ -494,7 +564,7 @@
       </select>
 
       <label for="natchathiram">Natchathiram:</label>
-      <select id="natchathiram" required="">
+      <select id="natchathiram" required>
         <option value="அஸ்வினி">அஸ்வினி</option>
         <option value="பரணி">பரணி</option>
         <option value="கார்த்திகை">கார்த்திகை</option>
@@ -737,73 +807,86 @@
       document.getElementById("mainContent").classList.remove("fade-out");
     }
     
-function exitApplication() {
-  applicationActive = false;
-
-  // Hide everything
-  document.getElementById("confirmationPopup").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-
-  // Method 1: For Android WebView/Cordova
-  if (typeof Android !== 'undefined' && Android.exitApp) {
-    Android.exitApp();
-    return;
-  }
-  
-  // Method 2: For Capacitor/Cordova
-  if (typeof navigator !== 'undefined' && navigator.app && navigator.app.exitApp) {
-    navigator.app.exitApp();
-    return;
-  }
-  
-  // Method 3: Try to close the window (works in some WebView configurations)
-  try {
-    window.open('', '_self');
-    window.close();
-  } catch (e) {
-    // If window.close() fails, show a message
-    document.body.innerHTML = `
-      <div style="
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        height: 100vh; 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        padding: 20px;
-      ">
-        <h1 style="font-size: 24px; margin-bottom: 20px;">Application Closed</h1>
-        <p style="font-size: 16px; margin-bottom: 30px;">You can now safely exit the app.</p>
-        <div style="
-          background: rgba(255,255,255,0.2); 
-          padding: 20px; 
-          border-radius: 10px;
-          max-width: 300px;
-        ">
-          <p style="font-size: 14px;">
-            <i class="fas fa-info-circle"></i> 
-            Please use the device's back button or recent apps menu to close the application completely.
-          </p>
-        </div>
-      </div>
-    `;
-  }
-  
-  // Remove event listeners to prevent any further interaction
-  const removeEventListeners = () => {
-    const allElements = document.querySelectorAll('*');
-    allElements.forEach(element => {
-      const newElement = element.cloneNode(true);
-      element.parentNode.replaceChild(newElement, element);
-    });
-  };
-  
-  setTimeout(removeEventListeners, 100);
-}
-
+    function exitApplication() {
+      applicationActive = false;
+      
+      // Hide confirmation popup and overlay
+      document.getElementById("confirmationPopup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      
+      // Hide the main application
+      document.getElementById("mainApplication").style.display = "none";
+      
+      // Show the exit screen
+      document.getElementById("exitScreen").style.display = "flex";
+      
+      // Clear any ongoing Firebase connections
+      database.goOffline();
+      
+      // Disable all event listeners
+      disableAllInteractions();
+      
+      // Attempt to close the app using different methods
+      attemptAppClose();
+    }
+    
+    function disableAllInteractions() {
+      // Remove all click event listeners
+      const elements = document.querySelectorAll('*');
+      elements.forEach(element => {
+        const newElement = element.cloneNode(true);
+        element.parentNode.replaceChild(newElement, element);
+      });
+      
+      // Remove keyboard shortcuts
+      document.onkeydown = null;
+      
+      // Remove any remaining event listeners
+      document.body.style.pointerEvents = 'none';
+    }
+    
+    function attemptAppClose() {
+      // Method 1: Try Cordova/Capacitor exit
+      if (typeof navigator !== 'undefined' && navigator.app && navigator.app.exitApp) {
+        setTimeout(() => {
+          navigator.app.exitApp();
+        }, 2000);
+        return;
+      }
+      
+      // Method 2: Try Android interface
+      if (typeof Android !== 'undefined' && Android.exitApp) {
+        setTimeout(() => {
+          Android.exitApp();
+        }, 2000);
+        return;
+      }
+      
+      // Method 3: Try to close window (works in some WebViews)
+      setTimeout(() => {
+        try {
+          window.open('', '_self').close();
+        } catch (e) {
+          // If window.close() fails, show message to user
+          document.getElementById("exitScreen").innerHTML = `
+            <div class="exit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="exit-title">Application Ready to Close</h1>
+            <p class="exit-message">
+              Please use your device's:<br>
+              1. Back button twice, OR<br>
+              2. Recent apps menu to close
+            </p>
+            <div class="exit-instruction">
+              <i class="fas fa-mobile-alt"></i>
+              Swipe up from bottom (or press back button) to exit completely.
+            </div>
+          `;
+        }
+      }, 1500);
+    }
+    
     function showFavorites() {
       if (!applicationActive) return;
       
@@ -890,6 +973,14 @@ function exitApplication() {
         showAll();
       }
     });
+    
+    // Handle device back button for Android
+    document.addEventListener('backbutton', function(e) {
+      if (applicationActive) {
+        e.preventDefault();
+        showConfirmation();
+      }
+    }, false);
   </script>
 
 </body>

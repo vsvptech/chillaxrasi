@@ -738,13 +738,18 @@
     }
     
 function exitApplication() {
-  if (navigator.app && navigator.app.exitApp) {
-    navigator.app.exitApp(); // REAL APP EXIT
-  } else {
-    window.close();
-  }
-}
+  applicationActive = false;
 
+  // Hide everything
+  document.getElementById("confirmationPopup").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+
+  // Try to close the app (works in WebView / popup windows)
+  window.open('', '_self');
+  window.close();
+
+  
+}
 
     function showFavorites() {
       if (!applicationActive) return;

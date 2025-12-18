@@ -234,16 +234,6 @@
       gap: 15px;
     }
     
-    .device-id {
-      font-size: 12px;
-      color: #666;
-      margin-left: 10px;
-      background: #f0f0f0;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-family: monospace;
-    }
-    
     .close-icon-btn {
       background: #ff4444;
       border: none;
@@ -520,7 +510,6 @@
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiv3Lg8Dz4rrxyPM3cG3V8uMccEck-754MGyf_6aJgrOnotvvwBzkCYAGx0-t4WMwTC1vUeM-kbYUzah9_R9G69LF2gJwyZBLC3gR7bZOAYdrqV2nMgAR07dEOmCymyLFtwWSlk25xLzOtNygGYCaFoFza0GDYTJvyZHUciz_ZZHe-Xzy58WI4qn1IZOQ8/s16000/rasilogo.png" 
              style="vertical-align: middle; height: 40px;" />
         <span>Chillax Rasi</span>
-        <span class="device-id" id="deviceIdDisplay">Loading...</span>
       </div>
       <!-- <button class="close-icon-btn" onclick="showConfirmation()" title="Exit Application">
         <i class="fas fa-times"></i>
@@ -664,7 +653,7 @@
     let applicationActive = true;
     let deviceId = null;
 
-    // Function to generate or retrieve device ID
+    // Function to generate or retrieve device ID (hidden from user)
     function getDeviceId() {
       if (deviceId) return deviceId;
       
@@ -676,10 +665,6 @@
         deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('chillaxrasi_device_id', deviceId);
       }
-      
-      // Display device ID (shortened)
-      const displayId = deviceId.length > 12 ? deviceId.substr(0, 12) + '...' : deviceId;
-      document.getElementById('deviceIdDisplay').textContent = 'Device: ' + displayId;
       
       return deviceId;
     }
@@ -836,7 +821,6 @@
           name, 
           rasi, 
           natchathiram 
-          // Note: favorite status is stored separately per device
         };
         
         if (!selectedDocId) {
@@ -992,16 +976,6 @@
       updateRecordCount();
     }
 
-    // Add a new device (for testing)
-    function addNewDevice() {
-      if (confirm("This will create a new device ID. All your favorites will be reset for this device. Continue?")) {
-        localStorage.removeItem('chillaxrasi_device_id');
-        deviceId = null;
-        getDeviceId();
-        loadData();
-      }
-    }
-
     // Initial loading of data
     loadData();
     
@@ -1026,10 +1000,6 @@
       }
       if (event.altKey && event.key === 'v' && applicationActive) {
         showAll();
-      }
-      // New device shortcut (for testing)
-      if (event.altKey && event.key === 'n' && applicationActive) {
-        addNewDevice();
       }
     });
     

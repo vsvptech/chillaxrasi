@@ -30,7 +30,7 @@
     }
 
     th, td {
-      padding: 8px;
+      padding: 2px;
       text-align: left;
     }
 
@@ -45,11 +45,22 @@
       text-align: left;
     }
     
-    td:last-child {
-      text-align: center;
-      width: 50px;
+    /* Style for the lock/edit button */
+    .edit-button {
+      background: none;
+      border: none;
+      color: #007bff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      padding: 5px;
     }
-
+    
+    .edit-button:hover {
+      color: #0056b3;
+      transform: scale(1.2);
+    }
+    
     input[type="text"], select {
       width: 100%;
       padding: 8px;
@@ -213,8 +224,8 @@
       padding: 10px 0;
       background-color: white;
       border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 5px;
+      margin-bottom: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     
@@ -248,7 +259,7 @@
     
     .main-content {
       transition: opacity 0.3s ease;
-      height: calc(100vh - 150px);
+      height: calc(100vh - 50px);
       overflow-y: auto;
     }
     
@@ -272,7 +283,7 @@
     .heart-icon {
       color: #ff4444;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 14px;
       transition: all 0.3s ease;
     }
     
@@ -287,7 +298,16 @@
     .heart-icon.inactive {
       color: #ccc;
     }
+td:nth-child(4) {
+  text-align: center;
+}
 
+.heart-icon {
+  display: inline-block;
+}
+td:nth-child(1), td:nth-child(2), td:nth-child(3) {
+  padding-left: 10px; /* Original was 8px, now 10px for 2px more */
+}
     tr:nth-child(odd) {
       background: #ffffff;
       color: #333;
@@ -491,9 +511,9 @@
              style="vertical-align: middle; height: 40px;" />
         <span>Chillax Rasi</span>
       </div>
-     <!-- <button class="close-icon-btn" onclick="showConfirmation()" title="Exit Application">
+      <!-- <button class="close-icon-btn" onclick="showConfirmation()" title="Exit Application">
         <i class="fas fa-times"></i>
-      </button>-->
+      </button> -->
     </div>
     
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
@@ -528,7 +548,8 @@
               <th style="width: 30%;">Name</th>
               <th style="width: 25%;">Rasi</th>
               <th style="width: 25%;">Natchathiram</th>
-              <th style="width: 10%;">Favorite</th>
+              <th style="width: 10%;">Fav</th>
+              <th style="width: 10%;">Edit</th> <!-- Added Edit column -->
             </tr>
           </thead>
           <tbody>
@@ -660,6 +681,11 @@
                  title="${isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}">
               </i>
             </td>
+            <td style="text-align: center;">
+              <button class="edit-button" onclick="showEditPopup('${key}')" title="Edit Entry">
+                <i class="fas fa-lock"></i>
+              </button>
+            </td>
           `;
           row.setAttribute("data-doc-id", key);
           row.setAttribute("data-favorite", isFavorite);
@@ -693,18 +719,6 @@
         console.error("Error updating favorite:", error);
       }
     }
-
-    document.querySelector("#data-table tbody").addEventListener("click", function (event) {
-      if (!applicationActive) return;
-      
-      const clickedElement = event.target;
-      // Only handle clicks on name, rasi, or natchathiram cells (not the heart icon)
-      if (clickedElement.tagName === "TD" && clickedElement.cellIndex < 3) {
-        const row = clickedElement.parentNode;
-        const docId = row.getAttribute("data-doc-id");
-        showEditPopup(docId);
-      }
-    });
 
     function showAddPopup() {
       if (!applicationActive) return;
@@ -807,48 +821,44 @@
       document.getElementById("mainContent").classList.remove("fade-out");
     }
     
- 
+    function exitApplication() {
+      // Remove dim overlay & fade
+      document.getElementById("confirmationPopup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("mainContent").classList.remove("fade-out");
 
-function exitApplication() {
+      // Android Cordova / WebView
+      if (navigator.app && navigator.app.exitApp) {
+        navigator.app.exitApp();
+        return;
+      }
 
-  // Remove dim overlay & fade
-  document.getElementById("confirmationPopup").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-  document.getElementById("mainContent").classList.remove("fade-out");
+      // Android native interface
+      if (typeof Android !== "undefined" && Android.exitApp) {
+        Android.exitApp();
+        return;
+      }
 
-  // Android Cordova / WebView
-  if (navigator.app && navigator.app.exitApp) {
-    navigator.app.exitApp();
-    return;
-  }
+      // Browser attempt (will fail in most cases)
+      window.open('', '_self');
+      window.close();
 
-  // Android native interface
-  if (typeof Android !== "undefined" && Android.exitApp) {
-    Android.exitApp();
-    return;
-  }
-
-  // Browser attempt (will fail in most cases)
-  window.open('', '_self');
-  window.close();
-
-  // 🔴 If still open → lock UI (no dim)
-  document.body.innerHTML = `
-    <div style="
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:Arial;
-      font-size:18px;
-      color:#555;
-      text-align:center;
-    ">
-      You may now close this tab or press back.
-    </div>
-  `;
-}
-
+      // 🔴 If still open → lock UI (no dim)
+      document.body.innerHTML = `
+        <div style="
+          height:100vh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-family:Arial;
+          font-size:18px;
+          color:#555;
+          text-align:center;
+        ">
+          You may now close this tab or press back.
+        </div>
+      `;
+    }
     
     function disableAllInteractions() {
       // Remove all click event listeners
